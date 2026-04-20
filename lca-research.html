@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LCA in UK Construction SMEs — Anusha Jambaldinni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d0f;
+    --surface: #111518;
+    --surface2: #161b1f;
+    --border: #1e2529;
+    --border-light: #2a3038;
+    --text: #e8eaec;
+    --text-muted: #6b7885;
+    --text-mid: #9aa5b0;
+    --accent: #00c9a7;
+    --accent2: #0085ff;
+    --accent3: #f59e0b;
+    --accent-dim: rgba(0,201,167,0.08);
+    --accent2-dim: rgba(0,133,255,0.08);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', 'Courier New', monospace;
+    --sans: 'Instrument Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    background: rgba(10,13,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    padding: 6px 12px;
+    border: 1px solid var(--border-light);
+    border-radius: 2px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 140px 48px 80px;
+    gap: 80px;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(ellipse, rgba(0,201,167,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .hero-eyebrow-line {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-eyebrow-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  .hero h1 em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    max-width: 520px;
+    margin-bottom: 48px;
+  }
+
+  .hero-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 520px;
+  }
+
+  .hero-meta-item {
+    background: var(--surface);
+    padding: 18px 20px;
+  }
+
+  .hero-meta-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .hero-meta-value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* Right column — stats panel */
+  .hero-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .stat-card:hover {
+    border-color: var(--border-light);
+    transform: translateX(4px);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s ease;
+  }
+
+  .stat-card:hover::before { transform: scaleY(1); }
+
+  .stat-card.blue::before { background: var(--accent2); }
+  .stat-card.amber::before { background: var(--accent3); }
+
+  .stat-number {
+    font-family: var(--mono);
+    font-size: 2.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-card.blue .stat-number { color: var(--accent2); }
+  .stat-card.amber .stat-number { color: var(--accent3); }
+
+  .stat-label {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.4;
+  }
+
+  /* ── SECTION STRUCTURE ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 64px;
+  }
+
+  .section-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 2.5vw, 2.6rem);
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── CONTEXT SECTION ── */
+  .context-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .context-body p {
+    font-size: 16px;
+    color: var(--text-mid);
+    line-height: 1.85;
+    margin-bottom: 20px;
+  }
+
+  .context-body p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .context-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .info-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+  }
+
+  .info-block-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .info-block-content {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border-light);
+    color: var(--text-mid);
+    background: var(--surface2);
+  }
+
+  .tag.green { border-color: rgba(0,201,167,0.3); color: var(--accent); background: var(--accent-dim); }
+  .tag.blue { border-color: rgba(0,133,255,0.3); color: var(--accent2); background: var(--accent2-dim); }
+
+  /* ── METHODOLOGY ── */
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .method-card {
+    background: var(--surface);
+    padding: 36px 32px;
+    position: relative;
+  }
+
+  .method-icon {
+    font-family: var(--mono);
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .method-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .method-desc {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .method-stat {
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── FINDINGS ── */
+  .findings-lead {
+    font-size: 19px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    max-width: 800px;
+    margin-bottom: 64px;
+    padding-left: 24px;
+    border-left: 3px solid var(--accent);
+  }
+
+  .barrier-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .barrier-item {
+    background: var(--surface);
+    padding: 36px;
+    position: relative;
+  }
+
+  .barrier-rank {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .barrier-rank::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .barrier-name {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .barrier-detail {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .barrier-pct {
+    font-family: var(--mono);
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .barrier-pct-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── QUOTE BLOCK ── */
+  .quote-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .quote-card {
+    background: var(--surface2);
+    padding: 36px 32px;
+    position: relative;
+  }
+
+  .quote-card::before {
+    content: '"';
+    font-family: var(--serif);
+    font-size: 80px;
+    color: rgba(0,201,167,0.12);
+    position: absolute;
+    top: 16px;
+    left: 28px;
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-style: italic;
+    font-size: 14.5px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    position: relative;
+    z-index: 1;
+    padding-top: 40px;
+    margin-bottom: 20px;
+  }
+
+  .quote-attr {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  .quote-attr span {
+    color: var(--accent);
+  }
+
+  /* ── POLICY COMPARISON ── */
+  .policy-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 48px;
+    font-size: 14px;
+  }
+
+  .policy-table thead tr {
+    background: var(--surface2);
+  }
+
+  .policy-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .policy-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  .policy-table tbody tr:last-child td { border-bottom: none; }
+
+  .policy-table tbody tr {
+    background: var(--surface);
+    transition: background 0.2s;
+  }
+
+  .policy-table tbody tr:hover { background: var(--surface2); }
+
+  .policy-country {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+
+  .pill-green { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(0,201,167,0.25); }
+  .pill-blue { background: var(--accent2-dim); color: var(--accent2); border: 1px solid rgba(0,133,255,0.25); }
+  .pill-amber { background: rgba(245,158,11,0.08); color: var(--accent3); border: 1px solid rgba(245,158,11,0.25); }
+  .pill-gray { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border-light); }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .rec-card {
+    background: var(--surface);
+    padding: 36px;
+    position: relative;
+  }
+
+  .rec-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .rec-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .rec-detail {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .rec-impact {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── OUTCOMES ── */
+  .outcomes-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 60px;
+  }
+
+  .outcome-cell {
+    background: var(--surface);
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .outcome-value {
+    font-family: var(--mono);
+    font-size: 2.4rem;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .outcome-label {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── SKILLS SECTION ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    padding: 28px 30px;
+  }
+
+  .skill-area {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .skill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .skill-list li {
+    font-size: 13.5px;
+    color: var(--text-mid);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.4;
+  }
+
+  .skill-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+  }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-name {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .footer-detail {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero > * {
+    animation: fadeInUp 0.7s ease both;
+  }
+
+  .hero > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero > *:nth-child(2) { animation-delay: 0.25s; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; gap: 48px; }
+    section { padding: 60px 24px; }
+    .context-grid { grid-template-columns: 1fr; gap: 40px; }
+    .method-grid { grid-template-columns: 1fr; }
+    .barrier-list { grid-template-columns: 1fr; }
+    .quote-row { grid-template-columns: 1fr; }
+    .rec-grid { grid-template-columns: 1fr; }
+    .outcomes-row { grid-template-columns: repeat(2, 1fr); }
+    .skills-grid { grid-template-columns: 1fr; }
+    .page-footer { flex-direction: column; gap: 24px; align-items: flex-start; }
+    .hero-meta-grid { grid-template-columns: 1fr; }
+    .section-divider { margin: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#" class="nav-brand">A. Jambaldinni</a>
+  <ul class="nav-links">
+    <li><a href="#context">Context</a></li>
+    <li><a href="#methodology">Method</a></li>
+    <li><a href="#findings">Findings</a></li>
+    <li><a href="#recommendations">Recommendations</a></li>
+    <li><a href="#outcomes">Outcomes</a></li>
+  </ul>
+  <span class="nav-tag">MSc · Oxford Brookes · 2025</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Research Project — 01</span>
+    </div>
+    <h1>Life Cycle Assessment in UK Construction <em>SMEs</em></h1>
+    <p class="hero-desc">
+      An executive investigation into why 99% of the UK construction industry — its SME backbone — remains locked out of the sustainability transition, and what regulatory architecture can unlock it.
+    </p>
+    <div class="hero-meta-grid">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Institution</div>
+        <div class="hero-meta-value">Oxford Brookes University</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Programme</div>
+        <div class="hero-meta-value">MSc Construction Project Management</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Supervisor</div>
+        <div class="hero-meta-value">Dr Mark Austin</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Completed</div>
+        <div class="hero-meta-value">May 2025 · 16,439 words</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-card">
+      <span class="stat-number">99%</span>
+      <div class="stat-label">of UK construction firms are SMEs — yet LCA policy systematically excludes them</div>
+    </div>
+    <div class="stat-card blue">
+      <span class="stat-number">40%</span>
+      <div class="stat-label">of all UK carbon emissions originate from the built environment</div>
+    </div>
+    <div class="stat-card amber">
+      <span class="stat-number">79%</span>
+      <div class="stat-label">of SME respondents identified financial constraints as the primary adoption barrier</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- CONTEXT -->
+<section id="context">
+  <div class="section-header reveal">
+    <span class="section-number">01 —</span>
+    <h2 class="section-title">Research Context</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="context-grid">
+    <div class="context-body reveal">
+      <p>The UK's Climate Change Act (2008) mandates net-zero carbon emissions by 2050. Yet the Committee on Climate Change (2020) confirmed the country is failing its own interim targets — a crisis concentrated in the built environment, which generates <strong>approximately 40% of national carbon output</strong>.</p>
+
+      <p>Life Cycle Assessment (LCA), the internationally standardised methodology under <strong>ISO 14040:2006</strong> for measuring environmental impacts across a building's entire lifespan, is widely accepted as the most rigorous tool available. However, its adoption remains almost entirely confined to large contractors, publicly funded schemes, and BREEAM/LEED-certified projects.</p>
+
+      <p>This study addresses a critical and under-researched question: if SMEs constitute 99% of UK construction firms and employ over 60% of the industry workforce, why does LCA policy continue to be designed for an industry shape that doesn't exist? And what regulatory architecture would actually work for smaller firms operating on 3% margins?</p>
+
+      <p>Through empirical primary research and cross-national policy comparative analysis, this dissertation builds an evidence base for <strong>SME-inclusive decarbonisation policy</strong> — a practical, phased framework grounded in industry reality rather than regulatory aspiration.</p>
+    </div>
+
+    <div class="context-sidebar reveal">
+      <div class="info-block">
+        <div class="info-block-label">Research Question</div>
+        <div class="info-block-content" style="font-style:italic; color: var(--text-mid); font-size:14px; line-height:1.6;">"What are the primary barriers to LCA adoption among SMEs in the UK construction sector, and how can regulatory interventions support its effective and widespread implementation?"</div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Scope</div>
+        <div class="info-block-content">UK Construction Sector · Private SMEs · Regulatory Policy Analysis</div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Comparative Countries</div>
+        <div class="info-block-content">
+          <div class="tag-list">
+            <span class="tag green">United Kingdom</span>
+            <span class="tag blue">Denmark</span>
+            <span class="tag">Norway</span>
+            <span class="tag">Tampere, Finland</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Standards Referenced</div>
+        <div class="info-block-content">
+          <div class="tag-list">
+            <span class="tag">ISO 14040:2006</span>
+            <span class="tag">EN 15978</span>
+            <span class="tag">TEK17 (Norway)</span>
+            <span class="tag">NS 3720:2018</span>
+            <span class="tag">BREEAM</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Key Concepts</div>
+        <div class="info-block-content">
+          <div class="tag-list">
+            <span class="tag green">LCA</span>
+            <span class="tag">EPD</span>
+            <span class="tag blue">Embodied Carbon</span>
+            <span class="tag">Whole Life Carbon</span>
+            <span class="tag">Part Z</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- METHODOLOGY -->
+<section id="methodology">
+  <div class="section-header reveal">
+    <span class="section-number">02 —</span>
+    <h2 class="section-title">Research Methodology</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="method-grid reveal">
+    <div class="method-card">
+      <span class="method-icon">◈</span>
+      <div class="method-title">Quantitative Survey</div>
+      <div class="method-desc">Online sector-wide survey distributed to UK construction professionals via targeted LinkedIn recruitment, capturing industry-wide patterns in LCA awareness, adoption rates, and perceived barriers across firm sizes and project types.</div>
+      <div class="method-stat">n = 34 respondents · 82% from SMEs</div>
+    </div>
+    <div class="method-card">
+      <span class="method-icon">◉</span>
+      <div class="method-title">Qualitative Interviews</div>
+      <div class="method-desc">Semi-structured practitioner interviews with industry professionals spanning sustainability consultancy, facade engineering, and early-career architecture. Critical Discourse Analysis applied to explore assumptions shaping LCA perceptions.</div>
+      <div class="method-stat">3 in-depth interviews · P1 · P2 · P3</div>
+    </div>
+    <div class="method-card">
+      <span class="method-icon">◐</span>
+      <div class="method-title">Comparative Policy Analysis</div>
+      <div class="method-desc">Documentary analysis of 11 peer-reviewed sources and policy frameworks from the UK, Denmark, Norway, and Tampere (Finland). Evaluates mandatory vs. voluntary vs. subsidy-led regulatory models against measurable SME outcomes.</div>
+      <div class="method-stat">3 policy models · 4 national cases</div>
+    </div>
+  </div>
+
+  <div class="info-block reveal" style="border-radius:4px;">
+    <div class="info-block-label">Triangulation Strategy</div>
+    <div class="info-block-content" style="font-size: 14px; color: var(--text-mid); line-height: 1.65; padding-top:4px;">
+      A concurrent triangulation matrix (Table 5, Dissertation) was constructed to validate findings across all three data sources. Where survey statistics, interview discourse, and secondary policy evidence converged, conclusions were treated as high-confidence. Divergences were interrogated to surface systemic assumptions not visible from any single method alone.
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FINDINGS -->
+<section id="findings">
+  <div class="section-header reveal">
+    <span class="section-number">03 —</span>
+    <h2 class="section-title">Key Findings</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <p class="findings-lead reveal">
+    The research identified four interlocking barrier categories preventing SME LCA adoption. These are not independent failures — they form a system in which each barrier amplifies the others, making voluntary compliance frameworks structurally inadequate.
+  </p>
+
+  <div class="barrier-list reveal">
+    <div class="barrier-item">
+      <div class="barrier-rank">Barrier 01</div>
+      <div class="barrier-name">Financial Constraints</div>
+      <div class="barrier-detail">Software licensing, consultant fees, and staff time are unabsorbable on 3% margins. SMEs view LCA as an operational cost rather than a strategic investment. The absence of any ROI pathway reinforces this perception. Financial incentives — subsidies, tax relief, matched funding — were the number-one requested enabler.</div>
+      <span class="barrier-pct">79%</span>
+      <div class="barrier-pct-label">cited financial barriers as primary constraint</div>
+    </div>
+    <div class="barrier-item">
+      <div class="barrier-rank">Barrier 02</div>
+      <div class="barrier-name">Regulatory Absence</div>
+      <div class="barrier-detail">With no legal mandate covering private SME projects, there is no client demand signal and no accountability mechanism. The UK's Net Zero Strategy and Part Z proposals both focus on large-scale public sector work, structurally excluding 99% of the industry. 59% of non-adopters cited absence of legal requirements as their primary reason for inaction.</div>
+      <span class="barrier-pct">68%</span>
+      <div class="barrier-pct-label">agreed government mandates would drive adoption</div>
+    </div>
+    <div class="barrier-item">
+      <div class="barrier-rank">Barrier 03</div>
+      <div class="barrier-name">Knowledge & Capability Gaps</div>
+      <div class="barrier-detail">LCA familiarity averaged only 3.5/5 across respondents. 44% have used LCA at least once — but almost exclusively when clients specifically requested it. Supply chain "data chaos" around EPDs creates uncertainty even for practitioners who attempt adoption. Training courses at £2,000+ per person are inaccessible for micro-enterprises.</div>
+      <span class="barrier-pct">71%</span>
+      <div class="barrier-pct-label">identified inadequate client understanding as a barrier</div>
+    </div>
+    <div class="barrier-item">
+      <div class="barrier-rank">Barrier 04</div>
+      <div class="barrier-name">Operational Integration</div>
+      <div class="barrier-detail">LCA adds an estimated 2–4 weeks to early-stage project planning in firms where one person already manages all technical, commercial, and compliance functions. 44% of SMEs do not measure carbon emissions at all; only 12% use dedicated LCA software. The workflow integration problem is as much cultural as technical.</div>
+      <span class="barrier-pct">56%</span>
+      <div class="barrier-pct-label">cited time constraints as a significant operational barrier</div>
+    </div>
+  </div>
+
+  <!-- PRACTITIONER QUOTES -->
+  <div class="quote-row reveal">
+    <div class="quote-card">
+      <p class="quote-text">When your turnover's £500k, dropping £2k on training is lunacy. The government could match-fund certifications. CIBSE's LCA courses are brilliant, but how does a small firm justify £2k and 40 hours for certification?</p>
+      <div class="quote-attr"><span>Participant 3</span> — Early-career practitioner, embodied carbon specialist</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-text">It's not just the software cost, it's staff time spent on LCA instead of revenue-generating work. When your margin is 3%, every hour counts. If you show them a way to make money by doing something different, they will.</p>
+      <div class="quote-attr"><span>Participant 2</span> — Senior engineer, facade systems & governance</div>
+    </div>
+    <div class="quote-card">
+      <p class="quote-text">MSMEs usually have one person handling everything — they can't suddenly become LCA experts overnight. I've personally taken the initiative to track carbon, but most SMEs don't have this knowledge.</p>
+      <div class="quote-attr"><span>Participant 1</span> — Senior practitioner, operational efficiency (UK & international)</div>
+    </div>
+  </div>
+
+  <!-- POLICY COMPARISON -->
+  <h3 class="section-title reveal" style="font-size:1.4rem; margin-bottom:24px;">Comparative Policy Analysis: UK · Denmark · Norway</h3>
+
+  <table class="policy-table reveal">
+    <thead>
+      <tr>
+        <th>Country</th>
+        <th>Policy Approach</th>
+        <th>Mechanism</th>
+        <th>SME Support</th>
+        <th>Effectiveness</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="policy-country">Norway</span></td>
+        <td>Mandatory carbon caps (TEK17 / NS 3720:2018)</td>
+        <td><span class="pill pill-green">Mandate</span></td>
+        <td>Limited — high compliance cost, insufficient subsidy offset</td>
+        <td>Highest emission reductions; adoption constrained by cost burden on smaller firms</td>
+      </tr>
+      <tr>
+        <td><span class="policy-country">Denmark</span></td>
+        <td>Mandatory LCA on major projects + 50% cost subsidies</td>
+        <td><span class="pill pill-blue">Mandate + Subsidy</span></td>
+        <td>Moderate — subsidy covers 50% of LCA costs; focus skewed to large enterprises</td>
+        <td>Higher adoption rates than UK; subsidy reduces financial friction but SME engagement remains partial</td>
+      </tr>
+      <tr>
+        <td><span class="policy-country">United Kingdom</span></td>
+        <td>Voluntary BEIS SME Action Plan (2022–25)</td>
+        <td><span class="pill pill-amber">Voluntary</span></td>
+        <td>Minimal — no financial support; no mandatory tools; SMEs not specifically addressed</td>
+        <td>Lowest effectiveness; voluntary frameworks have negligible impact on SME behaviour in absence of demand signals</td>
+      </tr>
+      <tr>
+        <td><span class="policy-country">Tampere (FI)</span></td>
+        <td>Municipal procurement mandate + OneClick LCA tool</td>
+        <td><span class="pill pill-green">Mandate + Tool</span></td>
+        <td>Strong within scope — standardised tool reduces complexity; phased thresholds ease adoption</td>
+        <td>Best practice model: LCA normalised in project planning; vendor-dependency risk noted</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- RECOMMENDATIONS -->
+<section id="recommendations">
+  <div class="section-header reveal">
+    <span class="section-number">04 —</span>
+    <h2 class="section-title">Recommendations</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="rec-grid reveal">
+    <div class="rec-card">
+      <span class="rec-number">REC — 01</span>
+      <div class="rec-title">Free National LCA Digital Platform</div>
+      <div class="rec-detail">A government-funded, centralised LCA tool offering UK-specific material data, automated compliance reporting, and a simplified interface calibrated to SME project types. Eliminates software cost and reduces the data-sourcing burden that consumes 68% of LCA time. Modelled on Tampere's standardised procurement approach.</div>
+      <div class="rec-impact">82% of respondents indicated this would support adoption</div>
+    </div>
+    <div class="rec-card">
+      <span class="rec-number">REC — 02</span>
+      <div class="rec-title">Green Microgrants & LCA Tax Relief</div>
+      <div class="rec-detail">Targeted financial instruments addressing 79% of identified barriers. Green Microgrants fund SME spending on LCA software, licences, and accredited training. Reduced tax rates on LCA-certified materials and retrofit projects create a positive ROI narrative. Modelled on Denmark's subsidy architecture but extended to micro-enterprises.</div>
+      <div class="rec-impact">91% agreed financial incentives would drive adoption</div>
+    </div>
+    <div class="rec-card">
+      <span class="rec-number">REC — 03</span>
+      <div class="rec-title">Phased Mandatory Rollout with Bronze Certification</div>
+      <div class="rec-detail">A graduated compliance pathway introducing LCA requirements in stages, beginning with publicly procured projects, then residential schemes above a threshold, then private sector. Bronze-level LCA certification — a simplified standard cutting compliance costs by 50% — creates an accessible entry point. Support rises to 59% when mandates are paired with practical assistance.</div>
+      <div class="rec-impact">Structured in alignment with respondent preference for phased regulation</div>
+    </div>
+    <div class="rec-card">
+      <span class="rec-number">REC — 04</span>
+      <div class="rec-title">Regional Mentoring & Procurement Reform</div>
+      <div class="rec-detail">Large-firm-to-SME mentoring programmes transfer capability and normalise LCA as standard professional practice. Client-side procurement reforms — embedding carbon reporting requirements in project briefs — create the demand signal currently absent from private residential markets. Addresses cultural apathy and the "optional add-on" framing identified across all three data sources.</div>
+      <div class="rec-impact">Identified as critical by all three interview participants</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- OUTCOMES -->
+<section id="outcomes">
+  <div class="section-header reveal">
+    <span class="section-number">05 —</span>
+    <h2 class="section-title">Research Outcomes & Skills Demonstrated</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="outcomes-row reveal">
+    <div class="outcome-cell">
+      <span class="outcome-value">34</span>
+      <div class="outcome-label">Survey respondents across UK construction SMEs</div>
+    </div>
+    <div class="outcome-cell">
+      <span class="outcome-value">3</span>
+      <div class="outcome-label">Semi-structured practitioner interviews conducted</div>
+    </div>
+    <div class="outcome-cell">
+      <span class="outcome-value">4</span>
+      <div class="outcome-label">National regulatory models comparatively analysed</div>
+    </div>
+    <div class="outcome-cell">
+      <span class="outcome-value">16k</span>
+      <div class="outcome-label">Words of Level 7 academic research and policy analysis</div>
+    </div>
+  </div>
+
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-area">Research & Analysis</div>
+      <ul class="skill-list">
+        <li>Mixed-methods research design (ISO 14040 aligned)</li>
+        <li>Critical Discourse Analysis of practitioner interviews</li>
+        <li>Concurrent triangulation methodology</li>
+        <li>Comparative cross-national policy evaluation</li>
+        <li>Systematic literature review (40+ sources)</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-area">Sustainability Strategy</div>
+      <ul class="skill-list">
+        <li>Whole Life Carbon Assessment frameworks</li>
+        <li>Net Zero policy architecture and gap analysis</li>
+        <li>EPD supply chain and data management</li>
+        <li>LCA tool evaluation (OneClick LCA, CarbonLite, TM65)</li>
+        <li>BREEAM/LEED sustainability certification alignment</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-area">Project Management</div>
+      <ul class="skill-list">
+        <li>SME operational constraint analysis</li>
+        <li>Stakeholder engagement & interview facilitation</li>
+        <li>Evidence-based recommendation development</li>
+        <li>Risk identification in regulatory frameworks</li>
+        <li>Phased implementation planning and governance</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div>
+    <div class="footer-name">Anusha Mallikarjun Jambaldinni</div>
+    <div class="footer-detail">Construction Project Manager · Architect · Oxford Brookes University · 2025</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">← Portfolio</a>
+    <a href="#">Next Project →</a>
+    <a href="#">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Stagger children of reveal containers
+  document.querySelectorAll('.method-grid, .barrier-list, .quote-row, .rec-grid, .outcomes-row, .skills-grid').forEach(container => {
+    Array.from(container.children).forEach((child, i) => {
+      child.style.transitionDelay = `${i * 0.08}s`;
+    });
+  });
+</script>
+</body>
+</html>
