@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIBA Stage 1 Feasibility & Risk — Anusha J</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0d0f; --surface:#111518; --surface2:#161b1f;
+    --border:#1e2529; --border-light:#2a3038;
+    --text:#e8eaec; --text-muted:#6b7885; --text-mid:#9aa5b0;
+    --accent:#0085ff; --accent2:#00c9a7; --accent3:#f59e0b;
+    --accent-dim:rgba(0,133,255,0.07); --accent2-dim:rgba(0,201,167,0.07);
+    --serif:'DM Serif Display',Georgia,serif;
+    --mono:'DM Mono',monospace;
+    --sans:'Instrument Sans',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.013) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.013) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,13,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--text);text-decoration:none;}
+  .nav-logo span{color:var(--accent);}
+  .nav-links{display:flex;gap:28px;list-style:none;}
+  .nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .2s;}
+  .nav-links a:hover{color:var(--accent);}
+  .nav-back{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);border:1px solid rgba(0,133,255,.4);padding:7px 16px;border-radius:2px;text-decoration:none;transition:background .2s,color .2s;}
+  .nav-back:hover{background:var(--accent);color:var(--bg);}
+
+  /* HERO */
+  .hero{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:140px 48px 80px;gap:80px;max-width:1280px;margin:0 auto;overflow:hidden;}
+  .hero::after{content:'';position:absolute;top:-200px;right:-100px;width:600px;height:600px;background:radial-gradient(ellipse,rgba(0,133,255,.06) 0%,transparent 70%);pointer-events:none;}
+  .hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:28px;animation:fadeUp .6s ease both;}
+  .eyebrow-line{width:40px;height:1px;background:var(--accent);}
+  .eyebrow-text{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);}
+  .hero h1{font-family:var(--serif);font-size:clamp(2.6rem,4vw,4rem);line-height:1.1;color:var(--text);margin-bottom:24px;font-weight:400;animation:fadeUp .6s .1s ease both;}
+  .hero h1 em{color:var(--accent);font-style:italic;}
+  .hero-desc{font-size:16px;color:var(--text-mid);line-height:1.8;max-width:520px;margin-bottom:40px;animation:fadeUp .6s .18s ease both;}
+  .hero-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;max-width:520px;animation:fadeUp .6s .26s ease both;}
+  .hero-meta-item{background:var(--surface);padding:16px 20px;}
+  .hero-meta-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px;}
+  .hero-meta-value{font-size:14px;color:var(--text);font-weight:500;}
+
+  /* right col stats */
+  .hero-stats{display:flex;flex-direction:column;gap:2px;animation:fadeUp .6s .2s ease both;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);padding:28px 32px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+  .stat-card:hover{border-color:var(--border-light);transform:translateX(4px);}
+  .stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .4s ease;}
+  .stat-card:hover::before{transform:scaleY(1);}
+  .stat-card.green::before{background:var(--accent2);}
+  .stat-card.amber::before{background:var(--accent3);}
+  .stat-number{font-family:var(--mono);font-size:2.8rem;font-weight:500;color:var(--accent);line-height:1;margin-bottom:8px;}
+  .stat-card.green .stat-number{color:var(--accent2);}
+  .stat-card.amber .stat-number{color:var(--accent3);}
+  .stat-label{font-size:14px;color:var(--text-mid);line-height:1.4;}
+
+  /* SECTIONS */
+  .section{position:relative;z-index:1;padding:100px 48px;max-width:1280px;margin:0 auto;}
+  .section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);position:relative;z-index:1;}
+  .section-header{display:flex;align-items:center;gap:18px;margin-bottom:64px;}
+  .section-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.1em;}
+  .section-title{font-family:var(--serif);font-size:clamp(1.6rem,2.2vw,2.4rem);font-weight:400;}
+  .section-line{flex:1;height:1px;background:var(--border);}
+
+  /* CONTEXT */
+  .context-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:start;}
+  .context-body p{font-size:16px;color:var(--text-mid);line-height:1.85;margin-bottom:20px;}
+  .context-body p strong{color:var(--text);font-weight:600;}
+  .context-sidebar{display:flex;flex-direction:column;gap:2px;}
+  .info-block{background:var(--surface);border:1px solid var(--border);padding:18px 22px;}
+  .info-block-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px;}
+  .info-block-content{font-size:14px;color:var(--text);line-height:1.5;}
+  .tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;padding:4px 10px;border-radius:2px;border:1px solid var(--border-light);color:var(--text-muted);background:var(--surface2);}
+  .tag.blue{border-color:rgba(0,133,255,.3);color:var(--accent);background:var(--accent-dim);}
+  .tag.green{border-color:rgba(0,201,167,.3);color:var(--accent2);background:var(--accent2-dim);}
+  .tag.amber{border-color:rgba(245,158,11,.3);color:var(--accent3);background:rgba(245,158,11,.06);}
+
+  /* COST BREAKDOWN */
+  .cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:48px;}
+  .cost-card{background:var(--surface);padding:32px 28px;}
+  .cost-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;}
+  .cost-value{font-family:var(--mono);font-size:1.9rem;font-weight:500;color:var(--accent);line-height:1;margin-bottom:6px;}
+  .cost-value.green{color:var(--accent2);}
+  .cost-value.amber{color:var(--accent3);}
+  .cost-sub{font-size:13px;color:var(--text-muted);line-height:1.5;}
+
+  /* CASHFLOW TABLE */
+  .cashflow-table-wrap{overflow-x:auto;margin-bottom:48px;}
+  .cashflow-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:4px;overflow:hidden;font-size:13px;}
+  .cashflow-table thead tr{background:var(--surface2);}
+  .cashflow-table th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:14px 16px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  .cashflow-table td{padding:13px 16px;border-bottom:1px solid var(--border);color:var(--text-mid);vertical-align:top;white-space:nowrap;}
+  .cashflow-table tbody tr:last-child td{border-bottom:none;}
+  .cashflow-table tbody tr{background:var(--surface);transition:background .2s;}
+  .cashflow-table tbody tr:hover{background:var(--surface2);}
+  .cashflow-table .positive{color:var(--accent2);}
+  .cashflow-table .negative{color:#f87171;}
+  .cashflow-table .highlight{font-weight:600;color:var(--text);}
+  .cashflow-table .phase-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;}
+
+  /* NPV OUTCOMES */
+  .npv-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:48px;}
+  .npv-cell{background:var(--surface);padding:30px 24px;text-align:center;}
+  .npv-val{font-family:var(--mono);font-size:2rem;font-weight:500;color:var(--accent);line-height:1;margin-bottom:8px;display:block;}
+  .npv-val.green{color:var(--accent2);}
+  .npv-val.amber{color:var(--accent3);}
+  .npv-desc{font-size:12px;color:var(--text-muted);line-height:1.5;}
+
+  /* RISK REGISTER */
+  .risk-intro{font-size:17px;color:var(--text-mid);line-height:1.8;max-width:800px;margin-bottom:48px;padding-left:24px;border-left:3px solid var(--accent);}
+  .risk-table-wrap{overflow-x:auto;margin-bottom:48px;}
+  .risk-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:4px;overflow:hidden;font-size:13px;}
+  .risk-table thead tr{background:var(--surface2);}
+  .risk-table th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:14px 16px;text-align:left;border-bottom:1px solid var(--border);}
+  .risk-table td{padding:13px 16px;border-bottom:1px solid var(--border);color:var(--text-mid);vertical-align:top;line-height:1.5;}
+  .risk-table tbody tr:last-child td{border-bottom:none;}
+  .risk-table tbody tr{background:var(--surface);transition:background .2s;}
+  .risk-table tbody tr:hover{background:var(--surface2);}
+  .score-pill{display:inline-block;font-family:var(--mono);font-size:12px;font-weight:500;padding:3px 10px;border-radius:2px;text-align:center;min-width:28px;}
+  .score-high{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .score-med{background:rgba(245,158,11,.1);color:var(--accent3);border:1px solid rgba(245,158,11,.3);}
+  .score-low{background:var(--accent2-dim);color:var(--accent2);border:1px solid rgba(0,201,167,.3);}
+  .risk-cat{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--text-muted);}
+
+  /* HEAT MATRIX */
+  .heat-section{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:48px;}
+  .heat-matrix{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:32px;}
+  .heat-title{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:24px;}
+  .matrix-grid{display:grid;grid-template-columns:auto 1fr 1fr 1fr;grid-template-rows:auto 1fr 1fr 1fr;gap:4px;}
+  .matrix-axis-label{font-family:var(--mono);font-size:10px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;padding:4px 8px;}
+  .matrix-cell{aspect-ratio:1;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:500;cursor:default;}
+  .cell-low{background:rgba(0,201,167,.15);color:var(--accent2);}
+  .cell-med{background:rgba(245,158,11,.15);color:var(--accent3);}
+  .cell-high{background:rgba(248,113,113,.18);color:#f87171;}
+  .heat-legend{display:flex;flex-direction:column;gap:10px;margin-top:20px;}
+  .legend-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);}
+  .legend-dot{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+
+  .risk-framework{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+  .framework-card{background:var(--surface);padding:32px;}
+  .framework-num{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:block;}
+  .framework-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:10px;}
+  .framework-desc{font-size:13.5px;color:var(--text-muted);line-height:1.7;}
+
+  /* SKILLS */
+  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+  .skill-card{background:var(--surface);padding:28px 30px;}
+  .skill-area{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .skill-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+  .skill-list li{font-size:13.5px;color:var(--text-mid);padding-left:16px;position:relative;line-height:1.4;}
+  .skill-list li::before{content:'—';position:absolute;left:0;color:var(--text-muted);font-size:11px;}
+
+  /* FOOTER */
+  .page-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:44px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+  .footer-name{font-family:var(--serif);font-size:1.1rem;color:var(--text);}
+  .footer-sub{font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:4px;}
+  .footer-links{display:flex;gap:24px;}
+  .footer-links a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .2s;}
+  .footer-links a:hover{color:var(--accent);}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  @media(max-width:900px){
+    nav{padding:14px 20px;}
+    .nav-links{display:none;}
+    .hero{grid-template-columns:1fr;padding:100px 20px 60px;gap:40px;}
+    .section{padding:60px 20px;}
+    .context-grid{grid-template-columns:1fr;gap:40px;}
+    .cost-grid{grid-template-columns:1fr;}
+    .npv-row{grid-template-columns:repeat(2,1fr);}
+    .heat-section{grid-template-columns:1fr;}
+    .risk-framework{grid-template-columns:1fr;}
+    .skills-grid{grid-template-columns:1fr;}
+    .page-footer{padding:32px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">AJ<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#cashflow">Cash Flow</a></li>
+    <li><a href="#risk">Risk Register</a></li>
+    <li><a href="#outcomes">Outcomes</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Project 02 — Feasibility & Risk</span>
+    </div>
+    <h1>RIBA Stage 1 Feasibility &amp; <em>Risk Analysis</em></h1>
+    <p class="hero-desc">
+      A comprehensive financial feasibility study and ISO 31000-aligned risk management plan for a £40M college campus development — encompassing 12 new facilities, a 45-year cash flow model, NPV analysis, and a 17-risk register across all project categories.
+    </p>
+    <div class="hero-meta-grid">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Client</div>
+        <div class="hero-meta-value">The College Project</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">RIBA Stage</div>
+        <div class="hero-meta-value">Stage 1 — Preparation & Briefing</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Standards</div>
+        <div class="hero-meta-value">ISO 31000:2018 · RICS · NRM1</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Completed</div>
+        <div class="hero-meta-value">Oxford Brookes · 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-card">
+      <span class="stat-number">£40M</span>
+      <div class="stat-label">Bond-funded campus development — 12 new facilities across phased construction</div>
+    </div>
+    <div class="stat-card green">
+      <span class="stat-number">45yr</span>
+      <div class="stat-label">Cash flow model with NPV of £132M, stress-tested across all scenarios</div>
+    </div>
+    <div class="stat-card amber">
+      <span class="stat-number">17</span>
+      <div class="stat-label">Risks identified, ranked, and mitigated across 7 RBS categories</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- OVERVIEW -->
+<div class="section" id="overview">
+  <div class="section-header reveal">
+    <span class="section-num">01 —</span>
+    <h2 class="section-title">Project Overview</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="context-grid">
+    <div class="context-body reveal">
+      <p>
+        <strong>The College Project</strong> is a £40 million campus modernisation programme comprising 12 new facilities: undergraduate and postgraduate accommodation, a sports pavilion, an assembly hall, a visiting fellow's flat, and landscaped grounds. The development is funded by a £40M bond at 4.5% annual interest, repayable over 45 years.
+      </p>
+      <p>
+        This study was prepared at <strong>RIBA Stage 1 — Preparation and Briefing</strong>, the critical early stage at which risk management foundations are established before design commitments are made. The work produced two primary deliverables: a comprehensive Order of Cost Estimate (OCE) and cash flow model, and an ISO 31000-aligned Risk Management Plan covering all risk categories from financial to societal and environmental.
+      </p>
+      <p>
+        The cash flow model runs from January 2024 through 2069 — spanning construction (35 months), operational ramp-up, and full steady-state income — modelling 7 separate rental income streams alongside bond financing, maintenance costs, and inflation-adjusted construction spend. The NPV analysis discounted at 5% returns a <strong>positive net present value of £8.5M</strong>, confirming project viability across all scenarios.
+      </p>
+      <p>
+        Across the risk register, two critical risks scored 9/9 (Maximum severity): material cost inflation and phased construction challenges — both with active mitigation strategies, named risk owners, and escalation procedures defined at RIBA Stage 1.
+      </p>
+    </div>
+    <div class="context-sidebar reveal">
+      <div class="info-block">
+        <div class="info-block-label">Facilities Delivered</div>
+        <div class="info-block-content">92 UG rooms · 120 PG rooms · 7 Fellows' flats · Visiting Professor flat · Sports Pavilion · Assembly Hall · Resident Manager flat · Landscaping & Parking</div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Bond Structure</div>
+        <div class="info-block-content">£40M at 4.5% p.a. · 45-year term · Monthly bond income invested at 6% during pre-construction · £150,000/month coupon payments</div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Construction Programme</div>
+        <div class="info-block-content">142 weeks (35 months) · Start: Jan 2025 · Completion: Nov 2027 · Phased handover by building block</div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Standards Applied</div>
+        <div class="info-block-content">
+          <div class="tag-list">
+            <span class="tag blue">ISO 31000:2018</span>
+            <span class="tag">RICS Practice Standards</span>
+            <span class="tag">NRM 1</span>
+            <span class="tag green">RIBA Stage 1</span>
+            <span class="tag">BS EN 31010</span>
+          </div>
+        </div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Risk Methodology</div>
+        <div class="info-block-content">
+          <div class="tag-list">
+            <span class="tag amber">Likelihood × Impact Matrix</span>
+            <span class="tag">Risk Breakdown Structure (RBS)</span>
+            <span class="tag">Heat Diagram</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- COST MODEL -->
+<div class="section" id="cashflow">
+  <div class="section-header reveal">
+    <span class="section-num">02 —</span>
+    <h2 class="section-title">Cost Model & Cash Flow Analysis</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- Cost breakdown -->
+  <div class="cost-grid reveal">
+    <div class="cost-card">
+      <div class="cost-label">Total Construction (Works Cost Estimate)</div>
+      <div class="cost-value">£41.1M</div>
+      <div class="cost-sub">Building works across 9 elements + 12% sustainability allowance. Largest element: PG Rooms at £17.0M (4,293m² @ £3,950/m²)</div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-label">Total Development Cost (inc. inflation)</div>
+      <div class="cost-value amber">£59.8M</div>
+      <div class="cost-sub">Includes professional fees (14%), CIL, insurance (1%), 10% contingency, tender inflation (2.02%), construction inflation (5.33%)</div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-label">Net Present Value (@ 5% discount rate)</div>
+      <div class="cost-value green">£8.5M</div>
+      <div class="cost-sub">45-year DCF confirms financial viability. Annual net cash flows grow from £1.7M (Year 6) to £2.7M+ (Year 35) as rental income compounds</div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-label">Monthly Construction Spend</div>
+      <div class="cost-value">£1.71M</div>
+      <div class="cost-sub">Even monthly drawdown across 35-month construction programme (Jan 2025 – Nov 2027)</div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-label">Year 1 Annual Rental Income</div>
+      <div class="cost-value green">£2.14M</div>
+      <div class="cost-sub">7 income streams: UG rooms, UG summer, PG rooms, 7 Fellows' flats, visiting professor, pavilion, assembly hall</div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-label">Bond Investment Return (pre-construction)</div>
+      <div class="cost-value">£200k</div>
+      <div class="cost-sub">Per month. £40M invested at 6% during 12-month pre-construction period, generating surplus before site start</div>
+    </div>
+  </div>
+
+  <!-- Cash flow phases table -->
+  <h3 class="section-title reveal" style="font-size:1.3rem;margin-bottom:24px;">45-Year Cash Flow — Key Phases</h3>
+  <div class="cashflow-table-wrap reveal">
+    <table class="cashflow-table">
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Period</th>
+          <th>Key Flows</th>
+          <th>Monthly Net</th>
+          <th>Cumulative Position</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="phase-label positive">Pre-construction</span></td>
+          <td>Jan 2024 – Dec 2024</td>
+          <td>Bond income £200k/mo · Finance cost £150k/mo · Existing rental £89k/mo</td>
+          <td class="positive">+£136k</td>
+          <td class="positive">+£1.68M</td>
+          <td>Bond invested at 6%; surplus builds before site start</td>
+        </tr>
+        <tr>
+          <td><span class="phase-label negative">Construction</span></td>
+          <td>Jan 2025 – Nov 2027</td>
+          <td>Construction £1.71M/mo · Finance £150k/mo · Partial rental from existing buildings</td>
+          <td class="negative">−£1.58M–£1.80M</td>
+          <td class="negative">Peak: −£59.9M</td>
+          <td>Additional funding required from Month 39. Capital lock-up period identified</td>
+        </tr>
+        <tr>
+          <td><span class="phase-label">Ramp-up</span></td>
+          <td>Dec 2027 – Dec 2028</td>
+          <td>New rental income phased in by building · Finance costs continue · No construction outflow</td>
+          <td>+£186k–£303k</td>
+          <td class="negative">Still negative (−£21.7M)</td>
+          <td>Phased handover: UG/PG rooms, Pavilion, Assembly Hall come online</td>
+        </tr>
+        <tr>
+          <td><span class="phase-label positive">Steady State</span></td>
+          <td>2029 onwards</td>
+          <td>Full rental income · 3–3.2% annual increases · Finance cost reducing as bond invested surplus depletes</td>
+          <td class="positive">+£364k–£2.7M</td>
+          <td class="positive">Positive by Year 8</td>
+          <td>Annual rental compounding at 2.9–3.2%. NPV £8.5M @ 5% discount rate</td>
+        </tr>
+        <tr>
+          <td><span class="phase-label amber" style="color:var(--accent3);">Bond Repayment</span></td>
+          <td>Year 45</td>
+          <td>£40M bond principal repayment</td>
+          <td class="negative">−£35.6M</td>
+          <td>—</td>
+          <td>Final year large outflow offset by 44 years of accumulated surplus</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Rental income breakdown -->
+  <h3 class="section-title reveal" style="font-size:1.3rem;margin-bottom:24px;">Rental Income Streams — Year 1</h3>
+  <div class="cashflow-table-wrap reveal">
+    <table class="cashflow-table">
+      <thead>
+        <tr>
+          <th>Space</th>
+          <th>Units</th>
+          <th>Monthly Rent</th>
+          <th>Annual Income Yr 1</th>
+          <th>Annual Increase</th>
+          <th>Rental Period</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="highlight">Undergraduates (A1–A3, B2)</td>
+          <td>92</td>
+          <td>£700/unit</td>
+          <td class="positive">£579,600</td>
+          <td>3.0%</td>
+          <td>9 months (Oct–Jun)</td>
+        </tr>
+        <tr>
+          <td class="highlight">UG Rooms — Summer Let</td>
+          <td>92</td>
+          <td>£800/unit</td>
+          <td class="positive">£220,800</td>
+          <td>3.2%</td>
+          <td>3 months (Jul–Sep)</td>
+        </tr>
+        <tr>
+          <td class="highlight">PG Rooms (C1, C2, D1–D3)</td>
+          <td>120</td>
+          <td>£800/unit</td>
+          <td class="positive">£1,152,000</td>
+          <td>3.0%</td>
+          <td>12 months</td>
+        </tr>
+        <tr>
+          <td class="highlight">Seven Fellows' Flats (B1)</td>
+          <td>7</td>
+          <td>£1,350/unit</td>
+          <td class="positive">£113,400</td>
+          <td>3.0%</td>
+          <td>12 months</td>
+        </tr>
+        <tr>
+          <td class="highlight">Visiting Professor's Flat</td>
+          <td>1</td>
+          <td>£1,700/unit</td>
+          <td class="positive">£20,400</td>
+          <td>3.0%</td>
+          <td>12 months</td>
+        </tr>
+        <tr>
+          <td class="highlight">Sports Pavilion</td>
+          <td>1</td>
+          <td>£2,600/mo</td>
+          <td class="positive">£31,200</td>
+          <td>2.9%</td>
+          <td>12 months</td>
+        </tr>
+        <tr>
+          <td class="highlight">Assembly Hall</td>
+          <td>1</td>
+          <td>£2,200/mo</td>
+          <td class="positive">£26,400</td>
+          <td>2.9%</td>
+          <td>12 months</td>
+        </tr>
+        <tr style="background:var(--surface2);">
+          <td class="highlight" colspan="3"><strong>Total Year 1 Rental Income</strong></td>
+          <td class="positive highlight"><strong>£2,143,800</strong></td>
+          <td colspan="2" style="color:var(--text-muted);font-size:12px;">Compounding annually at 2.9–3.2% per stream</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NPV outcomes -->
+  <div class="npv-row reveal">
+    <div class="npv-cell">
+      <span class="npv-val">£132M</span>
+      <div class="npv-desc">Gross NPV of all future cash inflows discounted at 5% over 45 years</div>
+    </div>
+    <div class="npv-cell">
+      <span class="npv-val green">£8.5M</span>
+      <div class="npv-desc">Net Present Value — project viable across all modelled scenarios</div>
+    </div>
+    <div class="npv-cell">
+      <span class="npv-val amber">35mo</span>
+      <div class="npv-desc">Construction programme — Jan 2025 to Nov 2027, £1.71M/month drawdown</div>
+    </div>
+    <div class="npv-cell">
+      <span class="npv-val">5%</span>
+      <div class="npv-desc">Discount rate applied · Bond rate 4.5% · Pre-construction investment return 6%</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- RISK REGISTER -->
+<div class="section" id="risk">
+  <div class="section-header reveal">
+    <span class="section-num">03 —</span>
+    <h2 class="section-title">Risk Register & Management Framework</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <p class="risk-intro reveal">
+    A 17-risk register was developed using ISO 31000:2018 and RICS practice standards, structured across 7 Risk Breakdown Structure (RBS) categories. Each risk was scored using a 3×3 Likelihood × Impact matrix. Two risks scored 9/9 — the maximum severity level — requiring immediate and proactive management with dedicated risk owners and fallback plans.
+  </p>
+
+  <!-- Heat matrix + legend -->
+  <div class="heat-section reveal">
+    <div class="heat-matrix">
+      <div class="heat-title">Likelihood × Impact Heat Matrix (ISO 31000)</div>
+      <div class="matrix-grid">
+        <div class="matrix-axis-label" style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--mono);font-size:10px;letter-spacing:.08em;">LIKELIHOOD</div>
+        <div class="matrix-axis-label" style="font-family:var(--mono);font-size:10px;">High (3)</div>
+        <div class="matrix-cell cell-med">3</div>
+        <div class="matrix-cell cell-high">6</div>
+        <div class="matrix-cell cell-high" style="background:rgba(248,113,113,.28);font-size:18px;font-weight:700;">9</div>
+        <div class="matrix-axis-label" style="font-family:var(--mono);font-size:10px;">Med (2)</div>
+        <div class="matrix-cell cell-low">2</div>
+        <div class="matrix-cell cell-med">4</div>
+        <div class="matrix-cell cell-high">6</div>
+        <div class="matrix-axis-label" style="font-family:var(--mono);font-size:10px;">Low (1)</div>
+        <div class="matrix-cell cell-low">1</div>
+        <div class="matrix-cell cell-low">2</div>
+        <div class="matrix-cell cell-med">3</div>
+        <div></div>
+        <div class="matrix-axis-label" style="font-family:var(--mono);font-size:10px;">Low (1)</div>
+        <div class="matrix-axis-label" style="font-family:var(--mono);font-size:10px;">Med (2)</div>
+        <div class="matrix-axis-label" style="font-family:var(--mono);font-size:10px;">High (3)</div>
+        <div></div>
+        <div class="matrix-axis-label" colspan="3" style="grid-column:2/5;font-family:var(--mono);font-size:10px;letter-spacing:.08em;">IMPACT</div>
+      </div>
+      <div class="heat-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(248,113,113,.25);border:1px solid rgba(248,113,113,.4);"></div>Critical (7–9): Immediate proactive management required</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(245,158,11,.18);border:1px solid rgba(245,158,11,.4);"></div>Intermediate (4–6): Active management & mitigation</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(0,201,167,.15);border:1px solid rgba(0,201,167,.3);"></div>Minor (1–3): General allowance in programme</div>
+      </div>
+    </div>
+    <div>
+      <div class="info-block" style="border-radius:4px 4px 0 0;">
+        <div class="info-block-label">Critical Risks (Score 9/9)</div>
+        <div class="info-block-content" style="color:var(--text-mid);font-size:13.5px;line-height:1.7;">
+          <strong style="color:#f87171;">Material Cost Inflation</strong> — Global market volatility on CLT and materials. Mitigation: fixed-price contracts locked in at procurement stage.<br><br>
+          <strong style="color:#f87171;">Phased Construction Challenges</strong> — Overlapping build phases creating safety and logistics conflicts. Mitigation: phase-specific teams and detailed scheduling.
+        </div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">High Risks (Score 6/9) — 8 risks</div>
+        <div class="info-block-content" style="color:var(--text-mid);font-size:13px;line-height:1.7;">Extreme Weather · Unstable Ground · Supply Chain Delays · Interest Rate Hikes · New Environmental Regulations · Health & Safety · Scope Changes · Budget Constraints · Labour Shortages</div>
+      </div>
+      <div class="info-block">
+        <div class="info-block-label">Risk Ownership Structure</div>
+        <div class="info-block-content" style="color:var(--text-mid);font-size:13px;line-height:1.7;">Each risk assigned to a single named owner: Project Manager · Finance Manager · Site Manager · H&S Manager · Communications Team · Quality Control Manager</div>
+      </div>
+      <div class="info-block" style="border-radius:0 0 4px 4px;">
+        <div class="info-block-label">RBS Categories</div>
+        <div class="info-block-content">
+          <div class="tag-list">
+            <span class="tag blue">Natural Environment</span>
+            <span class="tag blue">Economic</span>
+            <span class="tag blue">Government</span>
+            <span class="tag blue">Societal</span>
+            <span class="tag blue">Client</span>
+            <span class="tag blue">Construction</span>
+            <span class="tag blue">Project</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full risk register table -->
+  <h3 class="section-title reveal" style="font-size:1.3rem;margin-bottom:24px;">Full Risk Register — 17 Risks</h3>
+  <div class="risk-table-wrap reveal">
+    <table class="risk-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Risk Event</th>
+          <th>Category</th>
+          <th>L</th>
+          <th>I</th>
+          <th>Score</th>
+          <th>Owner</th>
+          <th>Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>01</td><td class="highlight">Extreme Weather Events</td><td><span class="risk-cat">Natural</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>Project Manager</td><td>Weather contingency plans; schedule non-weather tasks during adverse periods</td></tr>
+        <tr><td>02</td><td class="highlight">Flooding</td><td><span class="risk-cat">Natural</span></td><td>1</td><td>3</td><td><span class="score-pill score-low">3</span></td><td>Project Manager</td><td>Advanced drainage systems; waterproof basement areas</td></tr>
+        <tr><td>03</td><td class="highlight">Unstable Ground Conditions</td><td><span class="risk-cat">Natural</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>Site Manager</td><td>Geotechnical surveys pre-construction; contingency fund allocation</td></tr>
+        <tr><td>04</td><td class="highlight">Material Cost Inflation</td><td><span class="risk-cat">Economic</span></td><td>3</td><td>3</td><td><span class="score-pill score-high">9</span></td><td>Finance Manager</td><td>Fixed-price long-term contracts; monitor market trends</td></tr>
+        <tr><td>05</td><td class="highlight">Supply Chain Delays</td><td><span class="risk-cat">Economic</span></td><td>3</td><td>2</td><td><span class="score-pill score-med">6</span></td><td>Procurement Manager</td><td>Diversify suppliers; buffer periods in programme</td></tr>
+        <tr><td>06</td><td class="highlight">Interest Rate Hikes</td><td><span class="risk-cat">Economic</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>Finance Manager</td><td>Fixed-rate financing secured; financial reserves maintained</td></tr>
+        <tr><td>07</td><td class="highlight">Regulatory Delays</td><td><span class="risk-cat">Government</span></td><td>1</td><td>3</td><td><span class="score-pill score-low">3</span></td><td>Project Manager</td><td>Early permit submission; regular local authority communication</td></tr>
+        <tr><td>08</td><td class="highlight">New Environmental Regulations</td><td><span class="risk-cat">Government</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>Design Team</td><td>Flexibility integrated into designs; sustainability consultant engaged</td></tr>
+        <tr><td>09</td><td class="highlight">Community Opposition</td><td><span class="risk-cat">Societal</span></td><td>2</td><td>2</td><td><span class="score-pill score-med">4</span></td><td>Communications Team</td><td>Regular community consultations; noise barriers proposed</td></tr>
+        <tr><td>10</td><td class="highlight">Health & Safety Concerns</td><td><span class="risk-cat">Societal</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>H&amp;S Manager</td><td>Robust safety protocols; regular training; periodic audits</td></tr>
+        <tr><td>11</td><td class="highlight">Negative Publicity</td><td><span class="risk-cat">Societal</span></td><td>1</td><td>2</td><td><span class="score-pill score-low">2</span></td><td>Communications Team</td><td>Proactive media management; regular public updates</td></tr>
+        <tr><td>12</td><td class="highlight">Scope Changes</td><td><span class="risk-cat">Client</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>Project Manager</td><td>Strict change control process; contingency budget allocated</td></tr>
+        <tr><td>13</td><td class="highlight">Budget Constraints</td><td><span class="risk-cat">Client</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>Finance Manager</td><td>Contingency fund maintained; close financial monitoring</td></tr>
+        <tr><td>14</td><td class="highlight">Stakeholder Misalignment</td><td><span class="risk-cat">Client</span></td><td>2</td><td>2</td><td><span class="score-pill score-med">4</span></td><td>Project Manager</td><td>Regular communication; clear roles and responsibilities</td></tr>
+        <tr><td>15</td><td class="highlight">Phased Construction Challenges</td><td><span class="risk-cat">Construction</span></td><td>3</td><td>3</td><td><span class="score-pill score-high">9</span></td><td>Site Manager</td><td>Detailed construction schedules; phase-specific teams assigned</td></tr>
+        <tr><td>16</td><td class="highlight">Labour Shortages</td><td><span class="risk-cat">Construction</span></td><td>2</td><td>3</td><td><span class="score-pill score-med">6</span></td><td>HR Manager</td><td>Training programmes; competitive pay rates</td></tr>
+        <tr><td>17</td><td class="highlight">Construction Defects</td><td><span class="risk-cat">Construction</span></td><td>1</td><td>3</td><td><span class="score-pill score-low">3</span></td><td>Quality Control Manager</td><td>QA processes; experienced contractors; regular inspections</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Risk framework -->
+  <h3 class="section-title reveal" style="font-size:1.3rem;margin-bottom:24px;">Risk Management Framework — 6 Strategies</h3>
+  <div class="risk-framework reveal">
+    <div class="framework-card">
+      <span class="framework-num">Strategy 01</span>
+      <div class="framework-title">Avoidance</div>
+      <div class="framework-desc">Eliminating risks by changing plans. Regulatory delays avoided via early permit submission. Unstable ground conditions avoided via pre-construction geotechnical surveys.</div>
+    </div>
+    <div class="framework-card">
+      <span class="framework-num">Strategy 02</span>
+      <div class="framework-title">Mitigation</div>
+      <div class="framework-desc">Reducing impact through proactive measures. Material cost inflation mitigated via long-term fixed-price supplier contracts. Phased construction managed through precise scheduling and contractor collaboration.</div>
+    </div>
+    <div class="framework-card">
+      <span class="framework-num">Strategy 03</span>
+      <div class="framework-title">Transfer</div>
+      <div class="framework-desc">Shifting risk to another party. Interest rate risk transferred via fixed-rate bond financing. H&S accident risk transferred through comprehensive insurance and third-party liability coverage.</div>
+    </div>
+    <div class="framework-card">
+      <span class="framework-num">Strategy 04</span>
+      <div class="framework-title">Sharing</div>
+      <div class="framework-desc">Distributing risk across parties. Supply chain risk shared by engaging multiple suppliers. Sustainability integration risks shared with specialist consultants for solar panels and heat pump systems.</div>
+    </div>
+    <div class="framework-card">
+      <span class="framework-num">Strategy 05</span>
+      <div class="framework-title">Retention</div>
+      <div class="framework-desc">Accepting manageable risks within contingency. Community opposition accepted with monitoring. Minor construction defects retained within the project contingency budget.</div>
+    </div>
+    <div class="framework-card">
+      <span class="framework-num">Strategy 06</span>
+      <div class="framework-title">Control & Review</div>
+      <div class="framework-desc">Ongoing oversight and reassessment. Real-time monitoring via PM software. Regular coordination meetings. Continuous scope change review with College stakeholders.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- OUTCOMES -->
+<div class="section" id="outcomes">
+  <div class="section-header reveal">
+    <span class="section-num">04 —</span>
+    <h2 class="section-title">Skills Demonstrated</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <div class="skill-area">Financial Modelling</div>
+      <ul class="skill-list">
+        <li>45-year developer's cash flow model (monthly resolution)</li>
+        <li>Order of Cost Estimate (OCE) — NRM1 aligned</li>
+        <li>NPV / DCF analysis at 5% discount rate</li>
+        <li>IRR calculation across multiple investment scenarios</li>
+        <li>Tender and construction inflation modelling (BCIS indices)</li>
+        <li>Bond financing structure and coupon payment modelling</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-area" style="color:var(--accent2);">Risk Management</div>
+      <ul class="skill-list">
+        <li>ISO 31000:2018 risk management principles</li>
+        <li>Risk Breakdown Structure (RBS) — 7 categories</li>
+        <li>Likelihood × Impact matrix (3×3 scoring)</li>
+        <li>Risk register with named owners and mitigation</li>
+        <li>Heat diagram visualisation for stakeholder communication</li>
+        <li>6-strategy risk response framework (RICS-aligned)</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <div class="skill-area" style="color:var(--accent3);">Project Management</div>
+      <ul class="skill-list">
+        <li>RIBA Stage 1 — Preparation and Briefing deliverables</li>
+        <li>Feasibility assessment and viability reporting</li>
+        <li>Phased construction programme planning</li>
+        <li>Stakeholder engagement and public information planning</li>
+        <li>Change control and scope management processes</li>
+        <li>Multi-disciplinary risk ownership structures</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <div>
+    <div class="footer-name">Anusha Jambaldinni</div>
+    <div class="footer-sub">Construction Project Manager · Oxford Brookes · 2025</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">← Portfolio</a>
+    <a href="bim-plan.html">Next Project →</a>
+    <a href="mailto:anushajambaldinni.work@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.07, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach((el,i) => {
+    el.style.transitionDelay = (i * 0.035) + 's';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>
