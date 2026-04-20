@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applied BIM — Revit, Navisworks & Power BI — Anusha J</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0d0f;--surface:#111518;--surface2:#161b1f;--border:#1e2529;--border-light:#2a3038;--text:#e8eaec;--text-muted:#6b7885;--text-mid:#9aa5b0;--accent:#f59e0b;--accent2:#00c9a7;--accent3:#0085ff;--serif:'DM Serif Display',Georgia,serif;--mono:'DM Mono',monospace;--sans:'Instrument Sans',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.013) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.013) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,13,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-back{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);border:1px solid rgba(245,158,11,.4);padding:7px 16px;border-radius:2px;text-decoration:none;transition:background .2s,color .2s;}
+.nav-back:hover{background:var(--accent);color:var(--bg);}
+
+/* HERO */
+.hero{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:140px 48px 80px;gap:80px;max-width:1280px;margin:0 auto;}
+.hero::after{content:'';position:absolute;top:-200px;right:-100px;width:600px;height:600px;background:radial-gradient(ellipse,rgba(245,158,11,.05) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:28px;animation:fadeUp .6s ease both;}
+.eyebrow-line{width:40px;height:1px;background:var(--accent);}
+.eyebrow-text{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);}
+.hero h1{font-family:var(--serif);font-size:clamp(2.4rem,3.8vw,3.8rem);line-height:1.1;color:var(--text);margin-bottom:24px;font-weight:400;animation:fadeUp .6s .1s ease both;}
+.hero h1 em{color:var(--accent);font-style:italic;}
+.hero-desc{font-size:16px;color:var(--text-mid);line-height:1.8;max-width:520px;margin-bottom:40px;animation:fadeUp .6s .18s ease both;}
+.hero-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;max-width:520px;animation:fadeUp .6s .26s ease both;}
+.hero-meta-item{background:var(--surface);padding:16px 20px;}
+.hero-meta-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:5px;}
+.hero-meta-value{font-size:14px;color:var(--text);font-weight:500;line-height:1.4;}
+.hero-stats{display:flex;flex-direction:column;gap:2px;animation:fadeUp .6s .2s ease both;}
+.stat-card{background:var(--surface);border:1px solid var(--border);padding:26px 30px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.stat-card:hover{border-color:var(--border-light);transform:translateX(4px);}
+.stat-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);transform:scaleY(0);transform-origin:bottom;transition:transform .4s;}
+.stat-card:hover::before{transform:scaleY(1);}
+.stat-card.green::before{background:var(--accent2);}
+.stat-card.blue::before{background:var(--accent3);}
+.stat-number{font-family:var(--mono);font-size:2.4rem;font-weight:500;color:var(--accent);line-height:1;margin-bottom:7px;}
+.stat-card.green .stat-number{color:var(--accent2);}
+.stat-card.blue .stat-number{color:var(--accent3);}
+.stat-label{font-size:13.5px;color:var(--text-mid);line-height:1.4;}
+
+/* LAYOUT */
+.section{position:relative;z-index:1;padding:100px 48px;max-width:1280px;margin:0 auto;}
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent);position:relative;z-index:1;}
+.section-header{display:flex;align-items:center;gap:18px;margin-bottom:60px;}
+.section-num{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.1em;}
+.section-title{font-family:var(--serif);font-size:clamp(1.6rem,2.2vw,2.4rem);font-weight:400;}
+.section-line{flex:1;height:1px;background:var(--border);}
+.lead{font-size:17px;color:var(--text-mid);line-height:1.8;max-width:800px;margin-bottom:48px;padding-left:24px;border-left:3px solid var(--accent);}
+.sub-head{font-family:var(--serif);font-size:1.3rem;font-weight:400;margin-bottom:28px;}
+
+/* FLOAT LAYOUT — text left, image right (or reversed) */
+.float-row{display:grid;align-items:start;gap:48px;margin-bottom:64px;}
+.float-row.img-right{grid-template-columns:1fr 420px;}
+.float-row.img-left{grid-template-columns:420px 1fr;}
+.float-row.img-left .float-text{order:2;}
+.float-row.img-left .float-img{order:1;}
+.float-img{position:relative;}
+.float-img img{width:100%;border-radius:4px;border:1px solid var(--border);display:block;transition:border-color .3s;}
+.float-img img:hover{border-color:var(--border-light);}
+.float-img-caption{font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:10px;line-height:1.5;padding-left:2px;}
+.float-img-caption span{color:var(--accent);}
+.float-text{}
+.float-text p{font-size:15.5px;color:var(--text-mid);line-height:1.85;margin-bottom:18px;}
+.float-text p strong{color:var(--text);font-weight:600;}
+.float-text p:last-child{margin-bottom:0;}
+
+/* INFO BLOCK */
+.info-block{background:var(--surface);border:1px solid var(--border);padding:18px 22px;margin-bottom:2px;}
+.info-block:last-child{margin-bottom:0;}
+.info-block-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:7px;}
+.info-block-content{font-size:14px;color:var(--text-mid);line-height:1.6;}
+.info-block-content strong{color:var(--text);}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.tag{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:2px;border:1px solid var(--border-light);color:var(--text-muted);background:var(--surface2);}
+.tag.amber{border-color:rgba(245,158,11,.3);color:var(--accent);background:rgba(245,158,11,.07);}
+.tag.green{border-color:rgba(0,201,167,.3);color:var(--accent2);background:rgba(0,201,167,.07);}
+.tag.blue{border-color:rgba(0,133,255,.3);color:var(--accent3);background:rgba(0,133,255,.07);}
+
+/* MATERIALS GRID */
+.materials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:48px;}
+.material-card{background:var(--surface);padding:28px;}
+.mat-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.mat-eyebrow.amber{color:var(--accent);}
+.mat-eyebrow.green{color:var(--accent2);}
+.mat-eyebrow.blue{color:var(--accent3);}
+.mat-title{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--text);margin-bottom:4px;}
+.mat-subtitle{font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.4;}
+.mat-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border:1px solid var(--border);border-radius:2px;overflow:hidden;margin-bottom:12px;}
+.mat-stat{background:var(--surface2);padding:10px 12px;}
+.mat-stat-label{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;}
+.mat-stat-value{font-family:var(--mono);font-size:1rem;font-weight:500;color:var(--text);}
+.mat-stat-value.amber{color:var(--accent);}
+.mat-stat-value.green{color:var(--accent2);}
+.mat-stat-value.blue{color:var(--accent3);}
+.mat-source{font-size:11.5px;color:var(--text-muted);font-style:italic;line-height:1.5;}
+
+/* CO2 ROW */
+.co2-row{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:48px;}
+.co2-cell{background:var(--surface);padding:26px 20px;text-align:center;}
+.co2-val{font-family:var(--mono);font-size:1.7rem;font-weight:500;color:var(--accent2);line-height:1;margin-bottom:8px;display:block;}
+.co2-val.amber{color:var(--accent);}
+.co2-val.blue{color:var(--accent3);}
+.co2-label{font-size:12px;color:var(--text-muted);line-height:1.4;}
+
+/* TIMELINE */
+.timeline-grid{display:flex;flex-direction:column;gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:32px;}
+.tl-row{display:grid;grid-template-columns:190px 1fr 180px;align-items:center;background:var(--surface);padding:12px 18px;gap:16px;transition:background .2s;}
+.tl-row:hover{background:var(--surface2);}
+.tl-row.hdr{background:var(--surface2);}
+.tl-task{font-size:13px;font-weight:600;color:var(--text);}
+.tl-bar-wrap{position:relative;height:10px;background:var(--border);border-radius:2px;overflow:hidden;}
+.tl-bar{height:100%;border-radius:2px;background:var(--accent);opacity:.75;transition:opacity .2s;}
+.tl-row:hover .tl-bar{opacity:1;}
+.tl-dates{font-family:var(--mono);font-size:11px;color:var(--text-muted);text-align:right;}
+
+/* CLASH STATS */
+.clash-stats{display:flex;flex-direction:column;gap:2px;}
+.clash-stat{background:var(--surface);border:1px solid var(--border);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;}
+.clash-stat-label{font-size:13.5px;color:var(--text-mid);}
+.clash-stat-val{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent);}
+.clash-stat-val.red{color:#f87171;}
+.clash-stat-val.green{color:var(--accent2);}
+
+/* PIPELINE */
+.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:48px;position:relative;}
+.pipeline-step{background:var(--surface);padding:26px 14px;text-align:center;position:relative;}
+.pipeline-step::after{content:'→';position:absolute;right:-11px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:16px;color:var(--accent);z-index:2;}
+.pipeline-step:last-child::after{display:none;}
+.pipeline-icon{font-family:var(--mono);font-size:20px;color:var(--accent);margin-bottom:9px;display:block;}
+.pipeline-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.pipeline-desc{font-size:11px;color:var(--text-muted);line-height:1.5;}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--border);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.skill-card{background:var(--surface);padding:28px 30px;}
+.skill-area{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.skill-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.skill-list li{font-size:13.5px;color:var(--text-mid);padding-left:16px;position:relative;line-height:1.4;}
+.skill-list li::before{content:'—';position:absolute;left:0;color:var(--text-muted);font-size:11px;}
+
+.page-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:44px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.footer-name{font-family:var(--serif);font-size:1.1rem;color:var(--text);}
+.footer-sub{font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:4px;}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--accent);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:1000px){
+  nav{padding:14px 20px;}.nav-links{display:none;}
+  .hero{grid-template-columns:1fr;padding:100px 20px 60px;gap:40px;}
+  .section{padding:60px 20px;}
+  .float-row.img-right,.float-row.img-left{grid-template-columns:1fr;}
+  .float-row.img-left .float-text,.float-row.img-left .float-img{order:unset;}
+  .materials-grid{grid-template-columns:1fr;}
+  .co2-row{grid-template-columns:repeat(2,1fr);}
+  .pipeline{grid-template-columns:1fr;}.pipeline-step::after{display:none;}
+  .skills-grid{grid-template-columns:1fr;}
+  .tl-row{grid-template-columns:140px 1fr;}.tl-dates{display:none;}
+  .page-footer{padding:32px 20px;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">AJ<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#qto">QTO & CO₂</a></li>
+    <li><a href="#4d">4D Simulation</a></li>
+    <li><a href="#clash">Clash Detection</a></li>
+    <li><a href="#powerbi">Power BI</a></li>
+  </ul>
+  <a href="index.html" class="nav-back">← Portfolio</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow"><div class="eyebrow-line"></div><span class="eyebrow-text">Project 04 — Applied BIM</span></div>
+    <h1>BIM Design, <em>4D Simulation</em> & Data Analytics</h1>
+    <p class="hero-desc">A full applied BIM project built in Revit 2024 — domestic dwelling modelled to Part L, quantity take-off and embodied carbon assessed across three materials, 4D construction simulation in Navisworks TimeLiner, MEP vs Structural clash detection, and a Revit-to-Power BI data pipeline.</p>
+    <div class="hero-meta-grid">
+      <div class="hero-meta-item"><div class="hero-meta-label">Model</div><div class="hero-meta-value">Domestic dwelling · Ground + First floor</div></div>
+      <div class="hero-meta-item"><div class="hero-meta-label">Software</div><div class="hero-meta-value">Revit 2024 · Navisworks · Power BI · CostX</div></div>
+      <div class="hero-meta-item"><div class="hero-meta-label">Regulation</div><div class="hero-meta-value">Part L Building Regulations (UK)</div></div>
+      <div class="hero-meta-item"><div class="hero-meta-label">Completed</div><div class="hero-meta-value">Oxford Brookes · 2024</div></div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card"><span class="stat-number">3</span><div class="stat-label">Materials fully assessed: QTO, cost estimation and embodied carbon in Revit + Excel — Concrete, Glass, Wood</div></div>
+    <div class="stat-card green"><span class="stat-number">50</span><div class="stat-label">MEP vs Structural clashes detected in Navisworks — clearance test at 0.001m tolerance, grouped and reviewed</div></div>
+    <div class="stat-card blue"><span class="stat-number">11</span><div class="stat-label">4D simulation tasks in Navisworks TimeLiner — Foundation to Railing Fabrication over 185-day programme</div></div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- QTO -->
+<div class="section" id="qto">
+  <div class="section-header reveal"><span class="section-num">01 —</span><h2 class="section-title">Quantity Take-Off, Cost & Embodied Carbon</h2><div class="section-line"></div></div>
+
+  <!-- Glass — image right -->
+  <div class="float-row img-right reveal">
+    <div class="float-text">
+      <h3 class="sub-head">Revit Schedules → 5D Analysis</h3>
+      <p>Three building materials were assessed across the complete QTO pipeline. <strong>Quantities were extracted directly from the Revit 2024 model</strong> as material schedules — no manual counting. Each schedule was exported as CSV, cleaned in Excel, and analysed for cost and embodied carbon using density data and EE/EC intensity values from industry datasets.</p>
+      <p>The Glass schedule (shown opposite) demonstrates the workflow in action: 25 window and door elements, each with family type, count, material name, unit weight, area, and volume — all extracted automatically from the model. This same process was applied to Concrete Masonry (walls) and Wood/Timber (roof structure).</p>
+      <p>The pipeline demonstrates a complete <strong>Revit → CSV → Excel → 5D BIM → sustainability data</strong> chain — the same workflow used on live projects to generate cost plans and carbon reports from federated models.</p>
+    </div>
+    <div class="float-img">
+      <img src="assets/glass-qto.png" alt="Revit Glass Quantity Take-Off schedule showing 25 elements with family, type, count, material name, unit weight, area and volume">
+      <div class="float-img-caption"><span>Fig 1.</span> Revit 2024 — Glass Quantity Take-Off schedule. 25 elements extracted automatically from model. Unit weight: 23.7 kN/m³.</div>
+    </div>
+  </div>
+
+  <!-- Materials summary cards -->
+  <div class="materials-grid reveal">
+    <div class="material-card">
+      <div class="mat-eyebrow amber">Material 01 — External Walls</div>
+      <div class="mat-title">Concrete Masonry</div>
+      <div class="mat-subtitle">16 elements · Basic Wall · Wall-Ext_102Bwk-50Air-45Ins-100DBlk</div>
+      <div class="mat-stats">
+        <div class="mat-stat"><div class="mat-stat-label">Total Mass</div><div class="mat-stat-value amber">24,543 kg</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">Cost @ £5/m³</div><div class="mat-stat-value">£90.90</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">EE Emission</div><div class="mat-stat-value amber">19,144 MJ</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">EC Emission</div><div class="mat-stat-value amber">2,773 kgCO₂</div></div>
+      </div>
+      <div class="mat-source">Density: 1,350 kg/m³ · EE: 0.78 MJ/kg · EC: 0.113 kgCO₂/kg</div>
+    </div>
+    <div class="material-card">
+      <div class="mat-eyebrow green">Material 02 — Windows & Doors</div>
+      <div class="mat-title">Glass (Toughened)</div>
+      <div class="mat-subtitle">25 elements · Windows + door families · Area: 44.2m²</div>
+      <div class="mat-stats">
+        <div class="mat-stat"><div class="mat-stat-label">Total Area</div><div class="mat-stat-value green">44.2 m²</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">Cost @ £20/m²</div><div class="mat-stat-value">£2,040</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">EE Emission</div><div class="mat-stat-value green">1,038.7 MJ</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">EC Emission</div><div class="mat-stat-value green">59.67 kgCO₂</div></div>
+      </div>
+      <div class="mat-source">Density: 130 kg/m³ · EE: 23.5 MJ/kg · EC: 1.35 kgCO₂/kg</div>
+    </div>
+    <div class="material-card">
+      <div class="mat-eyebrow blue">Material 03 — Roof Structure</div>
+      <div class="mat-title">Wood (Timber General)</div>
+      <div class="mat-subtitle">4 elements · Basic Roof · Pitched truss · Area: 344m²</div>
+      <div class="mat-stats">
+        <div class="mat-stat"><div class="mat-stat-label">Total Mass</div><div class="mat-stat-value blue">4,142 kg</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">Cost @ £15/m³</div><div class="mat-stat-value">£129.45</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">EE Emission</div><div class="mat-stat-value blue">41,424 MJ</div></div>
+        <div class="mat-stat"><div class="mat-stat-label">EC Emission</div><div class="mat-stat-value blue">2,982 kgCO₂</div></div>
+      </div>
+      <div class="mat-source">Density: 480 kg/m³ · EE: 10 MJ/kg · EC: 0.72 kgCO₂/kg</div>
+    </div>
+  </div>
+
+  <div class="co2-row reveal">
+    <div class="co2-cell"><span class="co2-val amber">61,606 MJ</span><div class="co2-label">Total Embodied Energy — all three materials</div></div>
+    <div class="co2-cell"><span class="co2-val">5,815 kgCO₂</span><div class="co2-label">Total Embodied Carbon combined</div></div>
+    <div class="co2-cell"><span class="co2-val blue">£2,260</span><div class="co2-label">Total cost estimate across all elements</div></div>
+    <div class="co2-cell"><span class="co2-val amber">67%</span><div class="co2-label">Wood's share of EE — large roof area (344m²) is the dominant driver</div></div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- 4D SIMULATION -->
+<div class="section" id="4d">
+  <div class="section-header reveal"><span class="section-num">02 —</span><h2 class="section-title">4D Construction Simulation</h2><div class="section-line"></div></div>
+
+  <!-- Gantt image left, text right -->
+  <div class="float-row img-left reveal">
+    <div class="float-img">
+      <img src="assets/GANT_CHART.png" alt="Navisworks TimeLiner showing 11-task construction programme Gantt chart from Foundation to Railing Fabrication, April to October 2024">
+      <div class="float-img-caption"><span>Fig 2.</span> Navisworks TimeLiner — full 11-task programme. Foundation (30/03) through Railing Fabrication (01/10/2024). All tasks linked to model elements.</div>
+    </div>
+    <div class="float-text">
+      <h3 class="sub-head">Navisworks TimeLiner — 185-Day Programme</h3>
+      <p>A 4D simulation was developed by linking Revit model elements to an <strong>11-task construction programme</strong> in Navisworks TimeLiner. The programme spans 185 days — from Foundation (30 March 2024) to Railing Fabrication (1 October 2024) — with each task linked to the corresponding building elements in the 3D model.</p>
+      <p>As the simulation runs, each active task highlights green in the 3D view, making the construction sequence visually legible. The programme reflects realistic construction logic: structure first (foundations → slab → columns → walls), then envelope (roof → doors → windows), then finishes.</p>
+      <p>The Gantt chart (shown opposite) displays all <strong>11 tasks with planned start and end dates</strong>, linked directly to the model's selection tree which contains 24 element categories — Walls (44), Windows (24), Doors (13), Columns (4), Structural Foundations, and more.</p>
+    </div>
+  </div>
+
+  <!-- Timeline table -->
+  <div class="timeline-grid reveal">
+    <div class="tl-row hdr">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);">Construction Task</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);">Programme</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-align:right;">Planned Dates</div>
+    </div>
+    <div class="tl-row"><div class="tl-task">Foundation</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:5%"></div></div><div class="tl-dates">30/03 → 10/04/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Ground Floor Slab</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:20%"></div></div><div class="tl-dates">15/04 → 25/05/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Columns</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:35%"></div></div><div class="tl-dates">17/05 → 24/06/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Ground Floor Walls</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:48%"></div></div><div class="tl-dates">26/06 → 15/07/2024</div></div>
+    <div class="tl-row"><div class="tl-task">First Floor Slab</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:60%"></div></div><div class="tl-dates">25/07 → 18/08/2024</div></div>
+    <div class="tl-row"><div class="tl-task">First Floor Walls</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:70%"></div></div><div class="tl-dates">20/08 → 15/09/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Internal Partitions</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:76%"></div></div><div class="tl-dates">27/08 → 08/09/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Stairs</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:81%"></div></div><div class="tl-dates">08/09 → 20/09/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Roof</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:85%"></div></div><div class="tl-dates">15/09 → 30/09/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Doors</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:89%"></div></div><div class="tl-dates">15/09 → 15/10/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Windows</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:93%"></div></div><div class="tl-dates">20/09 → 20/10/2024</div></div>
+    <div class="tl-row"><div class="tl-task">Railing Fabrication</div><div class="tl-bar-wrap"><div class="tl-bar" style="width:100%"></div></div><div class="tl-dates">01/10 → 01/10/2024</div></div>
+  </div>
+
+  <!-- Mid-simulation image right -->
+  <div class="float-row img-right reveal">
+    <div class="float-text">
+      <h3 class="sub-head">Simulation in Progress — First Floor Walls</h3>
+      <p>The screenshot opposite shows the simulation at <strong>Day 150 (27 August 2024)</strong> — the First Floor Walls task at 25.99% completion. The green highlight shows the active task elements being placed in the model in real time, while the completed lower structure (ground floor slab, columns, walls, first floor slab) is shown in white.</p>
+      <p>This visual communication of construction sequence is one of the core benefits of 4D simulation — it allows project teams, clients, and contractors to understand exactly what is being built and when, reducing RFIs and sequencing conflicts before they reach site.</p>
+      <p>The simulation ends at <strong>Day 185 (1 October 2024)</strong> with all elements complete — windows (35.6%), doors (52%), and railing fabrication all installed, producing a fully rendered model of the completed dwelling.</p>
+    </div>
+    <div class="float-img">
+      <img src="assets/4d-walls.png" alt="Navisworks 4D simulation showing First Floor Walls task at 25.99% completion, Day 150, 27 August 2024, with green highlighted active elements">
+      <div class="float-img-caption"><span>Fig 3.</span> Day 150 — First Floor Walls (25.99%). Active elements highlighted green. Completed lower structure in white.</div>
+    </div>
+  </div>
+
+  <!-- Completed building image left -->
+  <div class="float-row img-left reveal">
+    <div class="float-img">
+      <img src="assets/4d-complete.png" alt="Navisworks 4D simulation showing near-complete building at Day 185, windows and doors being installed, green highlights on active window elements">
+      <div class="float-img-caption"><span>Fig 4.</span> Day 185 — Windows (35.6%) and Doors (52%) stage. Building envelope nearly complete. Final task: Railing Fabrication.</div>
+    </div>
+    <div class="float-text">
+      <h3 class="sub-head">Near-Complete Building — Day 185</h3>
+      <p>By Day 185 the model shows a near-complete two-storey dwelling — roof structure, walls, columns, stairs, and internal partitions all in place. The active task (Windows, 35.6%) highlights in green while completed elements render in their final material colours.</p>
+      <p>The simulation was built from a <strong>Revit model containing 24 element categories</strong> and over 400 individual components — Walls (44), Windows (24), Furniture (78), Generic Models (118), Structural Foundations, and more — all organised in the Navisworks Selection Tree and linked to TimeLiner tasks.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- CLASH DETECTION -->
+<div class="section" id="clash">
+  <div class="section-header reveal"><span class="section-num">03 —</span><h2 class="section-title">Clash Detection — MEP vs Structural</h2><div class="section-line"></div></div>
+
+  <!-- Clash image right, stats left -->
+  <div class="float-row img-right reveal">
+    <div class="float-text">
+      <h3 class="sub-head">50 Clashes — MEP vs Structural IFC Federation</h3>
+      <p>Two IFC models were federated in Navisworks Manage: <strong>MEP_HVAC.ifc</strong> and <strong>Structural_Model.ifc</strong>. Both models were set to identical project origins before running the test — critical for accurate cross-discipline coordination without false positives from misaligned coordinate systems.</p>
+      <p>A <strong>Clearance clash test</strong> was run at 0.001m (1mm) tolerance — the standard threshold for MEP/structural coordination. The test identified <strong>50 total clashes</strong>, all clearance type, at distances ranging from −0.003m to 0.000m. All even-numbered clashes (Clash2, Clash4 ... Clash50) were grouped as <strong>SameClashType</strong>, status set to Reviewed, and assigned to Jambaldinni-19291526.</p>
+      <p>A full <strong>HTML clash report</strong> was generated and exported (19291526_Jambaldinni), recording all 50 clashes with status, level, grid intersection, found date, description, assigned party, and distance values.</p>
+
+      <div class="clash-stats" style="margin-top:24px;">
+        <div class="clash-stat"><span class="clash-stat-label">Test Name</span><span class="clash-stat-val">MEP versus Structural</span></div>
+        <div class="clash-stat"><span class="clash-stat-label">Total Clashes</span><span class="clash-stat-val red">50</span></div>
+        <div class="clash-stat"><span class="clash-stat-label">New / Reviewed</span><span class="clash-stat-val">49 / <span style="color:var(--accent2)">1</span></span></div>
+        <div class="clash-stat"><span class="clash-stat-label">Test Type / Tolerance</span><span class="clash-stat-val">Clearance · 0.001m</span></div>
+        <div class="clash-stat"><span class="clash-stat-label">Group Name</span><span class="clash-stat-val">SameClashType</span></div>
+        <div class="clash-stat"><span class="clash-stat-label">Assigned To</span><span class="clash-stat-val">Jambaldinni · 19291526</span></div>
+      </div>
+    </div>
+    <div class="float-img">
+      <img src="assets/clash-detection.png" alt="Navisworks Clash Detective showing MEP versus Structural test with 50 clashes, SameClashType group reviewed, MEP model highlighted green in 3D view">
+      <div class="float-img-caption"><span>Fig 5.</span> Navisworks Clash Detective — MEP vs Structural. 50 clashes detected. SameClashType group (even clashes) assigned to Jambaldinni-19291526. MEP model highlighted green in 3D view.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-divider"></div>
+
+<!-- POWER BI -->
+<div class="section" id="powerbi">
+  <div class="section-header reveal"><span class="section-num">04 —</span><h2 class="section-title">Power BI Data Pipeline</h2><div class="section-line"></div></div>
+  <p class="lead reveal">A full Revit-to-Power BI data pipeline transforms BIM model data into interactive project intelligence — eliminating manual extraction and enabling real-time cost, carbon, and quantity monitoring from the same source that drives the 3D model.</p>
+
+  <div class="pipeline reveal">
+    <div class="pipeline-step"><span class="pipeline-icon">◈</span><div class="pipeline-name">Revit Model</div><div class="pipeline-desc">Schedules created per material: Glass, Wood, Concrete Masonry</div></div>
+    <div class="pipeline-step"><span class="pipeline-icon">⬇</span><div class="pipeline-name">CSV Export</div><div class="pipeline-desc">Schedules exported from Revit as .csv — one file per material</div></div>
+    <div class="pipeline-step"><span class="pipeline-icon">◉</span><div class="pipeline-name">Excel Clean-up</div><div class="pipeline-desc">Data cleaned. EE and CO₂ calculations applied per element</div></div>
+    <div class="pipeline-step"><span class="pipeline-icon">◐</span><div class="pipeline-name">Power BI Import</div><div class="pipeline-desc">Excel workbook imported. Data model relationships defined</div></div>
+    <div class="pipeline-step"><span class="pipeline-icon">▣</span><div class="pipeline-name">Visualisation</div><div class="pipeline-desc">Dashboards: cost, QTO and carbon metrics per element</div></div>
+  </div>
+
+  <h3 class="sub-head reveal">Skills Demonstrated</h3>
+  <div class="skills-grid reveal">
+    <div class="skill-card"><div class="skill-area">Digital Modelling</div><ul class="skill-list"><li>Revit 2024 — domestic dwelling to Part L</li><li>Material schedule creation and extraction</li><li>Quantity take-off from live BIM model</li><li>5D cost estimation in Revit + Excel</li><li>Embodied energy and CO₂ assessment</li><li>IFC export and model federation</li></ul></div>
+    <div class="skill-card"><div class="skill-area" style="color:var(--accent2);">Construction Tech</div><ul class="skill-list"><li>4D simulation — Navisworks TimeLiner (11 tasks)</li><li>185-day programme linked to 3D model</li><li>Clearance clash detection at 0.001m</li><li>Clash grouping, reviewing and assigning</li><li>HTML clash report generation</li><li>IFC coordination and origin alignment</li></ul></div>
+    <div class="skill-card"><div class="skill-area" style="color:var(--accent3);">Data & Analytics</div><ul class="skill-list"><li>Power BI pipeline: Revit → CSV → Excel → BI</li><li>Data cleaning and structuring in Excel</li><li>Interactive dashboard development</li><li>CostX — measurement and rate library</li><li>Carbon intensity calculation methodology</li><li>Cross-material comparative analysis</li></ul></div>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <div><div class="footer-name">Anusha Jambaldinni</div><div class="footer-sub">Construction Project Manager · Oxford Brookes · 2025</div></div>
+  <div class="footer-links"><a href="bep.html">← BIM Execution Plan</a><a href="stadium-sim.html">Next Project →</a><a href="mailto:anushajambaldinni.work@gmail.com">Email</a></div>
+</footer>
+<script>
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:.06,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i*.025)+'s';io.observe(el);});
+</script>
+</body>
+</html>
